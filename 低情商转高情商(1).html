@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>低情商转高情商工具</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .bg-gradient-pink {
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+    }
+    .bg-gradient-pink-light {
+      background: linear-gradient(135deg, #ffe0e9 0%, #ffd1dc 100%);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .shadow-pink {
+      box-shadow: 0 10px 40px rgba(255, 107, 157, 0.2);
+    }
+    .shadow-pink-hover {
+      box-shadow: 0 15px 50px rgba(255, 107, 157, 0.3);
+    }
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="py-8 px-4">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-8 animate-fadeIn">
+      <div class="text-6xl mb-4 animate-float" style="animation-delay: 0s">💖</div>
+      <h1 class="text-3xl md:text-4xl font-bold mb-3 drop-shadow-lg text-gradient">低情商转高情商</h1>
+      <p class="text-gray-700 text-lg">让每一句话都温暖人心 ❤️</p>
+    </div>
+
+    <div class="glass-effect rounded-3xl shadow-pink p-6 md:p-8 animate-fadeIn" style="animation-delay: 0.1s">
+      <div class="mb-6">
+        <label class="block text-gray-700 font-medium mb-2">
+          <span class="text-sm text-gray-500">✨ 输入</span> 低情商话术
+        </label>
+        <textarea
+          id="inputText"
+          placeholder="在这里输入低情商的话，例如：你怎么这么笨"
+          class="w-full h-32 p-4 bg-white/70 border-2 border-pink-200 rounded-2xl resize-none focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none transition-all duration-300 text-gray-700 text-lg"
+          onkeydown="if (event.key === 'Enter' && event.ctrlKey) handleConvert()"
+        ></textarea>
+        <p id="error" class="text-red-500 text-sm mt-2 hidden animate-fadeIn"></p>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-gray-700 font-medium mb-3">
+          <span class="text-sm text-gray-500">🎨 选择语气风格</span>
+        </label>
+        <div class="flex flex-wrap gap-2">
+          <button
+            onclick="setTone('warm')"
+            id="tone-warm"
+            class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 text-sm bg-gradient-pink text-white shadow-lg"
+          >
+            <span>🥰</span>
+            <span>温暖体贴</span>
+          </button>
+          <button
+            onclick="setTone('professional')"
+            id="tone-professional"
+            class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 text-sm bg-white/70 text-gray-600 hover:bg-pink-50 hover:scale-102 border border-pink-200"
+          >
+            <span>💼</span>
+            <span>专业得体</span>
+          </button>
+          <button
+            onclick="setTone('humorous')"
+            id="tone-humorous"
+            class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 text-sm bg-white/70 text-gray-600 hover:bg-pink-50 hover:scale-102 border border-pink-200"
+          >
+            <span>😄</span>
+            <span>幽默风趣</span>
+          </button>
+          <button
+            onclick="setTone('encouraging')"
+            id="tone-encouraging"
+            class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 text-sm bg-white/70 text-gray-600 hover:bg-pink-50 hover:scale-102 border border-pink-200"
+          >
+            <span>💪</span>
+            <span>鼓励激励</span>
+          </button>
+        </div>
+      </div>
+
+      <button
+        onclick="handleConvert()"
+        id="convertBtn"
+        class="w-full py-4 px-6 rounded-2xl font-semibold text-white text-lg transition-all duration-300 bg-gradient-pink hover:shadow-pink-hover hover:scale-[1.02] active:scale-[0.98]"
+      >
+        <span class="flex items-center justify-center gap-2">
+          <span>✨</span>
+          <span>一键转换</span>
+          <span>🔄</span>
+        </span>
+      </button>
+
+      <p class="text-center text-gray-500 text-sm mt-3">按 Ctrl + Enter 快速转换</p>
+
+      <div id="outputArea" class="mt-6 p-6 bg-gradient-pink-light rounded-2xl animate-fadeIn hidden" style="animation-delay: 0.2s">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-gray-700 font-medium">
+            <span class="text-sm text-gray-500">💝 输出</span> 高情商话术
+            <span id="toneBadge" class="ml-2 text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">🥰 温暖体贴</span>
+          </label>
+          <div class="flex items-center gap-2">
+            <button
+              onclick="copyOutput()"
+              id="copyBtn"
+              class="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-pink-200 rounded-xl hover:bg-pink-50 transition-all duration-300"
+            >
+              <span>📋</span>
+              <span>复制</span>
+            </button>
+            <div class="relative">
+              <button
+                onclick="toggleSharePanel()"
+                class="flex items-center gap-1 px-3 py-2 text-sm bg-white border border-pink-200 rounded-xl hover:bg-pink-50 transition-all duration-300"
+              >
+                <span>📤</span>
+                <span>分享</span>
+              </button>
+              <div id="sharePanel" class="absolute right-0 top-full mt-2 w-36 bg-white rounded-xl shadow-lg border border-pink-100 py-2 z-10 animate-fadeIn hidden">
+                <button
+                  onclick="shareAll('copy')"
+                  class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-pink-50 transition-colors flex items-center gap-2"
+                >
+                  <span>📋</span>
+                  <span>复制全部</span>
+                </button>
+                <button
+                  onclick="shareAll('download')"
+                  class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-pink-50 transition-colors flex items-center gap-2"
+                >
+                  <span>💬</span>
+                  <span>分享文本</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="outputText" class="text-gray-800 text-lg leading-relaxed"></p>
+      </div>
+    </div>
+
+    <div class="mt-6 glass-effect rounded-3xl shadow-pink p-6 animate-fadeIn" style="animation-delay: 0.2s">
+      <h3 class="text-gray-800 font-semibold mb-4 flex items-center gap-2">
+        <span>💬</span>
+        <span>试试这些示例</span>
+      </h3>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="setExample('你怎么这么笨')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">你怎么这么笨</button>
+        <button onclick="setExample('这事都怪你')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">这事都怪你</button>
+        <button onclick="setExample('你根本不行')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">你根本不行</button>
+        <button onclick="setExample('这么简单都不会')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">这么简单都不会</button>
+        <button onclick="setExample('你烦不烦')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">你烦不烦</button>
+        <button onclick="setExample('你真没用')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">你真没用</button>
+        <button onclick="setExample('我不管')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">我不管</button>
+        <button onclick="setExample('随便')" class="px-4 py-2.5 bg-white/70 text-gray-700 rounded-full hover:bg-pink-100 hover:text-pink-700 transition-all duration-300 text-sm border border-pink-100">随便</button>
+      </div>
+    </div>
+
+    <div class="mt-6 glass-effect rounded-3xl shadow-pink overflow-hidden animate-fadeIn" style="animation-delay: 0.3s">
+      <button
+        onclick="toggleHistory()"
+        class="w-full px-6 py-4 flex items-center justify-between hover:bg-pink-50/50 transition-colors"
+      >
+        <span class="text-gray-800 font-semibold flex items-center gap-2">
+          <span>📜</span>
+          <span>转换历史</span>
+          <span id="historyCount" class="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full">0</span>
+        </span>
+        <span id="historyArrow" class="text-gray-500 transition-transform duration-300">▼</span>
+      </button>
+      <div id="historyContent" class="px-6 pb-6 animate-fadeIn hidden">
+        <div id="historyList" class="space-y-3">
+          <p class="text-gray-400 text-center py-6">暂无历史记录</p>
+        </div>
+        <button
+          onclick="clearHistory()"
+          class="mt-4 w-full py-2 text-gray-500 hover:text-red-500 transition-colors text-sm"
+        >
+          🗑️ 清空历史记录
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center text-gray-600 text-sm">
+      <p class="flex items-center justify-center gap-2">
+        <span>💖</span>
+        <span>让沟通更温暖，让关系更美好</span>
+        <span>💖</span>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api/convert';
+    
+    let selectedTone = 'warm';
+    let history = [];
+    let copied = false;
+
+    const toneOptions = {
+      warm: { label: '温暖体贴', emoji: '🥰' },
+      professional: { label: '专业得体', emoji: '💼' },
+      humorous: { label: '幽默风趣', emoji: '😄' },
+      encouraging: { label: '鼓励激励', emoji: '💪' },
+    };
+
+    function setTone(tone) {
+      selectedTone = tone;
+      Object.keys(toneOptions).forEach(key => {
+        const btn = document.getElementById(`tone-${key}`);
+        if (key === tone) {
+          btn.classList.remove('bg-white/70', 'text-gray-600', 'hover:bg-pink-50', 'hover:scale-102', 'border', 'border-pink-200');
+          btn.classList.add('bg-gradient-pink', 'text-white', 'shadow-lg', 'scale-105');
+        } else {
+          btn.classList.remove('bg-gradient-pink', 'text-white', 'shadow-lg', 'scale-105');
+          btn.classList.add('bg-white/70', 'text-gray-600', 'hover:bg-pink-50', 'hover:scale-102', 'border', 'border-pink-200');
+        }
+      });
+    }
+
+    function setExample(text) {
+      document.getElementById('inputText').value = text;
+      document.getElementById('error').classList.add('hidden');
+    }
+
+    async function handleConvert() {
+      const inputText = document.getElementById('inputText').value.trim();
+      const errorEl = document.getElementById('error');
+      const outputArea = document.getElementById('outputArea');
+      const outputText = document.getElementById('outputText');
+      const convertBtn = document.getElementById('convertBtn');
+
+      if (!inputText) {
+        errorEl.textContent = '请输入要转换的话术';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      errorEl.classList.add('hidden');
+      outputArea.classList.add('hidden');
+      convertBtn.innerHTML = `<span class="flex items-center justify-center gap-2"><svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>转换中...</span>`;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            input: inputText,
+            tone: selectedTone,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.error || '转换失败');
+        }
+
+        const result = data.output || '';
+
+        if (result) {
+          outputText.textContent = result;
+          document.getElementById('toneBadge').innerHTML = `${toneOptions[selectedTone].emoji} ${toneOptions[selectedTone].label}`;
+          outputArea.classList.remove('hidden');
+
+          const newItem = {
+            id: Date.now().toString(),
+            input: inputText,
+            output: result,
+            tone: selectedTone,
+            timestamp: Date.now(),
+          };
+          history.unshift(newItem);
+          history = history.slice(0, 10);
+          saveHistory();
+          updateHistoryUI();
+        } else {
+          errorEl.textContent = '未获取到转换结果';
+          errorEl.classList.remove('hidden');
+        }
+      } catch (error) {
+        errorEl.textContent = '网络错误，请检查网络连接或稍后重试';
+        console.error('API Error:', error);
+        errorEl.classList.remove('hidden');
+      } finally {
+        convertBtn.innerHTML = `<span class="flex items-center justify-center gap-2"><span>✨</span><span>一键转换</span><span>🔄</span></span>`;
+      }
+    }
+
+    function getTonePrompt(tone) {
+      switch (tone) {
+        case 'warm': return '温暖体贴、善解人意的表达方式';
+        case 'professional': return '专业、得体、正式的表达方式';
+        case 'humorous': return '幽默、风趣、轻松的表达方式';
+        case 'encouraging': return '鼓励、激励、积极向上的表达方式';
+        default: return '温暖体贴的表达方式';
+      }
+    }
+
+    async function copyOutput() {
+      const outputText = document.getElementById('outputText').textContent;
+      if (outputText) {
+        await navigator.clipboard.writeText(outputText);
+        const copyBtn = document.getElementById('copyBtn');
+        copyBtn.innerHTML = '<span>✓</span><span>已复制</span>';
+        setTimeout(() => {
+          copyBtn.innerHTML = '<span>📋</span><span>复制</span>';
+        }, 2000);
+      }
+    }
+
+    function toggleSharePanel() {
+      const panel = document.getElementById('sharePanel');
+      panel.classList.toggle('hidden');
+    }
+
+    async function shareAll(type) {
+      const inputText = document.getElementById('inputText').value.trim();
+      const outputText = document.getElementById('outputText').textContent;
+      
+      if (!outputText) return;
+
+      const shareText = `低情商转高情商工具\n输入：${inputText}\n输出：${outputText}`;
+
+      if (type === 'copy') {
+        await navigator.clipboard.writeText(shareText);
+        const copyBtn = document.getElementById('copyBtn');
+        copyBtn.innerHTML = '<span>✓</span><span>已复制</span>';
+        setTimeout(() => {
+          copyBtn.innerHTML = '<span>📋</span><span>复制</span>';
+        }, 2000);
+      } else if (type === 'download') {
+        const blob = new Blob([shareText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'eq-convert.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      document.getElementById('sharePanel').classList.add('hidden');
+    }
+
+    function toggleHistory() {
+      const content = document.getElementById('historyContent');
+      const arrow = document.getElementById('historyArrow');
+      content.classList.toggle('hidden');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    function saveHistory() {
+      localStorage.setItem('eq-history', JSON.stringify(history));
+    }
+
+    function loadHistory() {
+      const saved = localStorage.getItem('eq-history');
+      if (saved) {
+        history = JSON.parse(saved);
+      }
+    }
+
+    function updateHistoryUI() {
+      const list = document.getElementById('historyList');
+      const count = document.getElementById('historyCount');
+      
+      count.textContent = history.length;
+
+      if (history.length === 0) {
+        list.innerHTML = '<p class="text-gray-400 text-center py-6">暂无历史记录</p>';
+        return;
+      }
+
+      list.innerHTML = history.map(item => `
+        <div onclick="loadFromHistory('${item.id}')" class="p-4 bg-white/50 rounded-xl cursor-pointer hover:bg-pink-50 transition-all duration-300 border border-pink-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-400">${formatTime(item.timestamp)}</span>
+            <span class="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full">${toneOptions[item.tone].emoji} ${toneOptions[item.tone].label}</span>
+          </div>
+          <p class="text-gray-600 text-sm line-clamp-1">${item.input}</p>
+          <p class="text-pink-600 text-sm line-clamp-1 mt-1">${item.output}</p>
+        </div>
+      `).join('');
+    }
+
+    function loadFromHistory(id) {
+      const item = history.find(h => h.id === id);
+      if (item) {
+        document.getElementById('inputText').value = item.input;
+        document.getElementById('outputText').textContent = item.output;
+        document.getElementById('toneBadge').innerHTML = `${toneOptions[item.tone].emoji} ${toneOptions[item.tone].label}`;
+        setTone(item.tone);
+        document.getElementById('outputArea').classList.remove('hidden');
+        document.getElementById('historyContent').classList.add('hidden');
+        document.getElementById('historyArrow').classList.remove('rotate-180');
+      }
+    }
+
+    function clearHistory() {
+      history = [];
+      localStorage.removeItem('eq-history');
+      updateHistoryUI();
+    }
+
+    function formatTime(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleString('zh-CN', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadHistory();
+      updateHistoryUI();
+    });
+  </script>
+</body>
+</html>
